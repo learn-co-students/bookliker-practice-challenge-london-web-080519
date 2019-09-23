@@ -85,6 +85,9 @@ function readBook(book){
     // if users.id(1) is found within book.users, alert
     if (currentUsers.find(function(s) {return s === currentUser})) {
         alert('You read this already!')
+        currentUsers = currentUsers.filter(user => user !== currentUser)
+        book.users = currentUsers
+        API.patch(baseURL, `${book.id}`, book).then(removeLikesOnClient)
     }
     // else add to array, patch through to db.json, and update on Client
     else {
@@ -100,5 +103,19 @@ function updateLikesOnClient(book){
     newUserLike.innerText = `${currentUser.username}`
     userLikes.append(newUserLike)
 }
+
+function removeLikesOnClient(book){
+    let userLikesToRemove = document.querySelector(`.users-for-book-${book.id}`)
+    while (userLikesToRemove.firstChild) {
+        userLikesToRemove.removeChild(userLikesToRemove.firstChild)
+    }
+    book.users.forEach(user => {
+        let userLiked = document.createElement('h5')
+        userLiked.innerText = user.username
+        userLikesToRemove.append(userLiked)
+    })
+}
+
+
 
 document.addEventListener("DOMContentLoaded", getAndRenderBooks);
