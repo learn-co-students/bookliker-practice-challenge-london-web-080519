@@ -2,3 +2,9 @@ body {
 	display: grid;
 	grid-template-columns: 2fr 8fr
 }
+
+
+.userList {
+/*	visibility: hidden; */
+	font-weight: bold;
+} 
