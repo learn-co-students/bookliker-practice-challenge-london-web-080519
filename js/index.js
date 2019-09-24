@@ -5,6 +5,7 @@ document.addEventListener("DOMContentLoaded", getAndRenderBooks);
 const baseURL = "http://localhost:3000/books/";
 const showPanel = document.querySelector("#show-panel");
 const list = document.querySelector("#list");
+const currentUser = { id: 1, username: "pouros" };
 
 //server -- FETCH
 
@@ -38,12 +39,9 @@ function renderBook(book) {
 }
 
 function handleBookClick(book) {
-  event.preventDefault();
   while (showPanel.hasChildNodes()) {
     showPanel.removeChild(showPanel.lastChild);
   }
- 
-
   let header = document.createElement("h2");
   let image = document.createElement("img");
   let description = document.createElement("p");
@@ -52,8 +50,7 @@ function handleBookClick(book) {
   description.innerText = book.description;
   showPanel.append(header, image, description);
   let readers = book.users;
-  uniqueReaders = [...new Set(readers)];
-  uniqueReaders.forEach(reader => {
+  readers.forEach(reader => {
     let readerEl = document.createElement("p");
     readerEl.innerText = reader.username;
     showPanel.append(readerEl);
@@ -75,15 +72,15 @@ function handleBookClick(book) {
 function handleReadButtonClick(book) {
   event.preventDefault();
   let allUsersArray = book.users;
-  allUsersArray.push({ id: 1, username: "pouros" });
-  usersObject = { users: allUsersArray };
-  API.patch(baseURL, book.id, usersObject).then();
+  allUsersArray.push(currentUser);
+  let readUsersObject = { users: allUsersArray };
+  API.patch(baseURL, book.id, readUsersObject).then(book => handleBookClick(book));
 }
 
 function handleDeleteButtonClick(book) {
   event.preventDefault();
   let allUsersArray = book.users;
-  allUsersArray.pop();
-  usersObject = { users: allUsersArray };
-  API.patch(baseURL, book.id, usersObject).then(console.log);
+  filteredArray = allUsersArray.filter(user => user.username != "pouros");
+  let deleteUsersObject = { users: filteredArray };
+  API.patch(baseURL, book.id, deleteUsersObject).then(book => handleBookClick(book));
 }
