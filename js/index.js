@@ -30,8 +30,6 @@ function getAndRenderBooks() {
   API.get(baseURL).then(bookList => bookList.forEach(renderBook));
 }
 
-// render renderBooks
-
 function renderBook(book) {
   let li = document.createElement("li");
   li.innerText = book.title;
@@ -44,6 +42,8 @@ function handleBookClick(book) {
   while (showPanel.hasChildNodes()) {
     showPanel.removeChild(showPanel.lastChild);
   }
+ 
+
   let header = document.createElement("h2");
   let image = document.createElement("img");
   let description = document.createElement("p");
@@ -63,12 +63,12 @@ function handleBookClick(book) {
     deleteButton = document.createElement("button");
     deleteButton.innerText = "Delete Book";
     showPanel.append(deleteButton);
-    deleteButton.addEventListener("click", handleDeleteButtonClick(book));
+    deleteButton.addEventListener("click", () => handleDeleteButtonClick(book));
   } else {
     readButton = document.createElement("button");
     readButton.innerText = "Read Book";
     showPanel.append(readButton);
-    readButton.addEventListener("click", handleReadButtonClick(book));
+    readButton.addEventListener("click", () => handleReadButtonClick(book));
   }
 }
 
@@ -77,7 +77,7 @@ function handleReadButtonClick(book) {
   let allUsersArray = book.users;
   allUsersArray.push({ id: 1, username: "pouros" });
   usersObject = { users: allUsersArray };
-  API.patch(baseURL, book.id, usersObject).then(console.log);
+  API.patch(baseURL, book.id, usersObject).then();
 }
 
 function handleDeleteButtonClick(book) {
