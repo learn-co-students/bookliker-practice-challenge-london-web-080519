@@ -50,7 +50,7 @@ function listAllBooks() {
                           // you get back your promise Value.
     API.getBooks(booksURL).then(booksList => booksList.forEach(renderBooks));
     //forEach on the Promise value, and callback function to render books
-    API.getUsers(usersURL).then()
+    //API.getUsers(usersURL).then()
 
 }
 
