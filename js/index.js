@@ -1,9 +1,8 @@
-// document.addEventListener("DOMContentLoaded", function() {});
 
 // get API details
 
 const booksURL = "http://localhost:3000/books"
-const usersURL = "http://http://localhost:3000/users";
+const usersURL = "http://localhost:3000/users"
 
 function getBooks(url) {
     return fetch(url).then(response => response.json())
@@ -24,45 +23,48 @@ function patch(url, id, inputData) {
     }).then(response => response.json())
 }
 
-API = { getBooks, patch }
+API = { getBooks, patch, getUsers }
 
 //////////
 
 
 //CONSTANTS
-
+const userArray = []
 const list = document.querySelector("ul#list")
 const showPanel = document.querySelector("div#show-panel")
+const allUsers = getUsers(usersURL).then(u=> u.forEach(storeUsers))
+const pouros = getUsers(usersURL).then(user => user[0])
 
 //////////
 
 
 //FUNCTIONS
 
+// store all users
+function storeUsers(u) {
+    userArray.push(u)
+}
 
 // render all book LIs
 function listAllBooks() {
                           // you get back your promise Value.
     API.getBooks(booksURL).then(booksList => booksList.forEach(renderBooks));
-}                                     //forEach on the Promise value, and callback function to render books
+    //forEach on the Promise value, and callback function to render books
+    API.getUsers(usersURL).then()
 
+}
 
 
 function renderBooks(book) {
     let li = document.createElement("li")
     li.innerText = book.title
     list.appendChild(li)
-    //                    // then it is showing
-    // if (showPanel.innerHTML !== "") {
-    //     li.addEventListener("click", removeNode)
-    // } else {
-         li.addEventListener("click", () => openBook(book)) // an. function returns openbook function and passes in your book object
-    // }
+    // an. function returns openbook function and passes in your book object
+    li.addEventListener("click", () => openBook(book)) 
 }
 
 
 function openBook(book) {
-    //console.log(book.users)
     showPanel.innerHTML = ""
     let h1 = document.createElement("h1")
     h1.innerText = book.title
@@ -71,44 +73,49 @@ function openBook(book) {
     let desc = document.createElement("p")
     desc.innerText = book.description
 
-    let userList = document.createElement("p")
+    let userList = document.createElement("ul")
     userList.className = "userList"
         for (let i=0; i<book.users.length; i++) {
-            userList.innerText = book.users[i].username
+            let li = document.createElement("li")
+            li.innerText = book.users[i].username
+            userList.appendChild(li)
         }
 
     let readButton = document.createElement("button")
     readButton.innerText = "Read Book"
-    readButton.addEventListener("click", () => handleReadClick(book))
+    readButton.addEventListener("click", () => handleReadClick(book, ))
   
     showPanel.append(h1, img, desc, userList, readButton )
 }
 
 
 function handleReadClick(readBook) {
-    if (readBook.users.find(e=> e.id == 1)) {
+    if (readBook.users.find(u=> u.id == 1)) {
         alert("You've already read this book!")
     } else {
         let localBook = readBook
         //I suppose normally you'd use whatever is in the session
-        localBook.users.push({
+        let pouros = {
             "id": 1,
             "username": "pouros"
-        })
-        API.patch(booksURL, readBook.id, localBook )//.then(showReaders)
+        }
+        localBook.users.push(pouros)
+        API.patch(booksURL, readBook.id, localBook ).then(addReader(pouros))
     }
 }
 
-function showReaders() {
-    
-    showPanel.append(userList)
+function addReader(reader) {
+    let readerList = document.querySelector("ul.userList")
+    let newReader = document.createElement("li")
+    newReader.innerText = reader.username
+    readerList.appendChild(newReader)
 }
 
 
 /////////////
 
 
-
+// document.addEventListener("DOMContentLoaded", function() {});
 
 // this loads all your books and starts it running!
 document.body.onload = listAllBooks
