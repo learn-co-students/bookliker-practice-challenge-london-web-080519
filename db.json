@@ -33,10 +33,6 @@
         {
           "id": 6,
           "username": "steuber"
-        },
-        {
-          "id": 1,
-          "username": "pouros"
         }
       ]
     },
@@ -73,10 +69,6 @@
         {
           "id": 8,
           "username": "goodwin"
-        },
-        {
-          "id": 1,
-          "username": "pouros"
         }
       ]
     },
@@ -97,10 +89,6 @@
         {
           "id": 8,
           "username": "goodwin"
-        },
-        {
-          "id": 1,
-          "username": "pouros"
         }
       ]
     },
@@ -121,10 +109,6 @@
         {
           "id": 1,
           "username": "pouros"
-        },
-        {
-          "id": 1,
-          "username": "pouros"
         }
       ]
     },
@@ -141,10 +125,6 @@
         {
           "id": 5,
           "username": "king"
-        },
-        {
-          "id": 1,
-          "username": "pouros"
         }
       ]
     },
@@ -165,10 +145,6 @@
         {
           "id": 2,
           "username": "auer"
-        },
-        {
-          "id": 1,
-          "username": "pouros"
         },
         {
           "id": 1,
@@ -197,14 +173,6 @@
         {
           "id": 1,
           "username": "pouros"
-        },
-        {
-          "id": 1,
-          "username": "pouros"
-        },
-        {
-          "id": 1,
-          "username": "pouros"
         }
       ]
     },
@@ -225,19 +193,11 @@
         {
           "id": 1,
           "username": "pouros"
-        },
-        {
-          "id": 1,
-          "username": "pouros"
         }
       ]
     }
   ],
   "users": [
-    {
-      "id": 1,
-      "username": "pouros"
-    },
     {
       "id": 2,
       "username": "auer"

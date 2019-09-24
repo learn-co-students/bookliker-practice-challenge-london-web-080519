@@ -1,7 +1,12 @@
 document.addEventListener("DOMContentLoaded", getAndRenderBooks);
 
-baseURL = "http://localhost:3000/books/";
-//fetch
+// CONSTANTS
+
+const baseURL = "http://localhost:3000/books/";
+const showPanel = document.querySelector("#show-panel");
+const list = document.querySelector("#list");
+
+//server -- FETCH
 
 function get(url) {
   return fetch(url).then(response => response.json());
@@ -28,20 +33,17 @@ function getAndRenderBooks() {
 // render renderBooks
 
 function renderBook(book) {
-  let list = document.querySelector("#list");
   let li = document.createElement("li");
   li.innerText = book.title;
   list.append(li);
   li.addEventListener("click", () => handleBookClick(book));
 }
 
-
 function handleBookClick(book) {
-    console.log(book.users)
-let showPanel = document.querySelector("#show-panel");
-    while (showPanel.hasChildNodes()) {
+  event.preventDefault();
+  while (showPanel.hasChildNodes()) {
     showPanel.removeChild(showPanel.lastChild);
-    }
+  }
   let header = document.createElement("h2");
   let image = document.createElement("img");
   let description = document.createElement("p");
@@ -49,37 +51,39 @@ let showPanel = document.querySelector("#show-panel");
   image.src = book.img_url;
   description.innerText = book.description;
   showPanel.append(header, image, description);
-  let readers = book.users
-  readers.forEach(reader => {
-      let readerEl = document.createElement("p");
-      readerEl.innerText = reader.username;
-      showPanel.append(readerEl);
-  }) 
-  filterUsers = book.users.filter(user => user.username === "pouros");
-  if (filterUsers) {
+  let readers = book.users;
+  uniqueReaders = [...new Set(readers)];
+  uniqueReaders.forEach(reader => {
+    let readerEl = document.createElement("p");
+    readerEl.innerText = reader.username;
+    showPanel.append(readerEl);
+  });
+  filterUsers = readers.filter(reader => reader.id == 1);
+  if (filterUsers.length > 0) {
+    deleteButton = document.createElement("button");
+    deleteButton.innerText = "Delete Book";
+    showPanel.append(deleteButton);
+    deleteButton.addEventListener("click", handleDeleteButtonClick(book));
+  } else {
     readButton = document.createElement("button");
     readButton.innerText = "Read Book";
     showPanel.append(readButton);
     readButton.addEventListener("click", handleReadButtonClick(book));
-  } else {
-    deleteButton = document.createElement("button");
-    deleteButton.innerText = "Read Book";
-    showPanel.append(deleteButton);
-    deleteButton.addEventListener("click", handleDeleteButtonClick(book));
   }
 }
 
 function handleReadButtonClick(book) {
-  allUsersArray = book.users;
+  event.preventDefault();
+  let allUsersArray = book.users;
   allUsersArray.push({ id: 1, username: "pouros" });
   usersObject = { users: allUsersArray };
-  API.patch(baseURL, book.id, usersObject);
+  API.patch(baseURL, book.id, usersObject).then(console.log);
 }
 
-function handleDeleteButtonClick(book){
-    allUsersArray = book.users;
-  allUsersArray.push({ id: 1, username: "pouros" });
+function handleDeleteButtonClick(book) {
+  event.preventDefault();
+  let allUsersArray = book.users;
+  allUsersArray.pop();
   usersObject = { users: allUsersArray };
-  API.patch(baseURL, book.id, usersObject);
-
+  API.patch(baseURL, book.id, usersObject).then(console.log);
 }
